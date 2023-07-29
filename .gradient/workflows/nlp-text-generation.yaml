@@ -12,46 +12,46 @@
 #
 # Last updated: Nov 03rd 2021
 
-on:
-  github:
-    branches:
-      only: main
+# on:
+#   github:
+#     branches:
+#       only: main
 
-jobs:
+# jobs:
 
-  cloneRepo:
-    resources:
-      instance-type: C4
-    outputs:
-      repo:
-        type: volume
-    uses: git-checkout@v1
-    with:
-      url: context.event.github.url
-      ref: context.event.github.ref
+#   cloneRepo:
+#     resources:
+#       instance-type: C4
+#     outputs:
+#       repo:
+#         type: volume
+#     uses: git-checkout@v1
+#     with:
+#       url: context.event.github.url
+#       ref: context.event.github.ref
 
-  generateText:
-    resources:
-      instance-type: C5
-    needs:
-      - cloneRepo
-    inputs:
-      repo: cloneRepo.outputs.repo
-    outputs:
-      generatedText:
-        type: dataset
-        with:
-          ref: demo-dataset
-    uses: script@v1
-    with:
-      script: |-
-        cp -R /inputs/repo /nlp
-        cd /nlp
-        pip3 install -U transformers
-        python3 nlp_text_generation.py
-        mv output.txt /outputs/generatedText
-        ls "-aFlR" /outputs/generatedText
-      image: paperspace/transformers-gpu:0.4.0
+#   generateText:
+#     resources:
+#       instance-type: C5
+#     needs:
+#       - cloneRepo
+#     inputs:
+#       repo: cloneRepo.outputs.repo
+#     outputs:
+#       generatedText:
+#         type: dataset
+#         with:
+#           ref: demo-dataset
+#     uses: script@v1
+#     with:
+#       script: |-
+#         cp -R /inputs/repo /nlp
+#         cd /nlp
+#         pip3 install -U transformers
+#         python3 nlp_text_generation.py
+#         mv output.txt /outputs/generatedText
+#         ls "-aFlR" /outputs/generatedText
+#       image: paperspace/transformers-gpu:0.4.0
 
 # Appendix: Extra details
 #
